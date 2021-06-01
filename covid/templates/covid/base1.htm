@@ -1,0 +1,77 @@
+{% extends 'covid\base.htm' %}
+{% block css %}
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  tr:hover {background-color:#f5f5f5;}
+{% endblock %}
+{% block title %} COVID-CENTERS {% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="alert alert-primary" role="alert">
+    <p>Date/Time: <span id="datetime"></span></p>
+
+<script>
+var dt = new Date();
+document.getElementById("datetime").innerHTML = dt.toLocaleString();
+</script>
+ </div>
+</div>
+<div class="container-fluid" style="width: 90%;">
+    <div class="card-group">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Hospital name</h5>
+                <p class="card-text">this space is for detail about hospital like address phn number and other
+                    thins.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://source.unsplash.com/500x300/?hospital,clinic" class="rounded mx-auto d-block"
+                alt="...">
+        </div>
+        <div class="card text-center"
+        style="padding-right: 40px;">
+            <div class="card-body">
+                <h5 class="card-titlle">Availability of beds</h5>
+                <table class="table table-bordered"
+                    style="width:100%; ">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col" colspan="2" style="background-color: powderblue;">L1</th>
+                            <th scope="col" colspan="2" style="background-color: powderblue;">L2</th>
+                            <th scope="col" colspan="2" style="background-color: powderblue;">L3</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td colspan="2" style="background-color: powderblue;" >Isolation</td>
+                        <td colspan="2" style="background-color: powderblue;">Isolation with oxygen</td>
+                        <td colspan="2" style="background-color: powderblue;">HDU/ICU Bed</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:rgb(255, 255, 0);">Total Bed</td>
+                        <td style="background-color:lightgreen;">Available Bed</td>
+                        <td style="background-color:rgb(255, 255, 0);">Total Bed</td>
+                        <td style="background-color:lightgreen;">Available Bed</td>
+                        <td style="background-color:rgb(255, 255, 0);">Total Bed</td>
+                        <td style="background-color:lightgreen;">Available Bed</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:rgb(255, 255, 0);">6</td>
+                        <td style="background-color:lightgreen;">6</td>
+                        <td style="background-color:rgb(255, 255, 0);">61</td>
+                        <td style="background-color:lightgreen;">52</td>
+                        <td style="background-color:rgb(255, 255, 0);">26</td>
+                        <td style="background-color:lightgreen;">3</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+{% endblock %}

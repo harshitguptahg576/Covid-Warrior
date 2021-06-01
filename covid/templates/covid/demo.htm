@@ -1,0 +1,264 @@
+{% extends 'covid\base.htm' %}
+{% load static %}
+{% block css %}
+.blank{
+height:5px;
+background:rgb(255,130,0);
+}
+.contain{
+  padding-top:120px;
+  background:url("{% static 'covid\images\summary.jpg'%}");
+  background-size: cover;
+  width:100%;
+  height:300px;
+  margin-top:80px;
+  margin-bottom:70px;
+}
+.report{
+width:90%;
+font-family: "Georgia", serif;
+}
+.rep{
+  width:95%;
+font-family: "Georgia", serif;
+}
+h5,h3{
+  font-weight:600;
+
+}
+.tit{
+  background-color:black;
+  color: rgb(255,140,0);
+  font-size: 26px;
+  font-weight: 600;
+  height: 42px;
+  }
+  .tit::before{
+  content:"___ __ _";
+  font-size:35px;
+  font-weight: 100%;
+  color:rgb(255,140,0);
+  margin:-5px 0 0 40px;
+  position:absolute;
+  }
+.tr{
+background-color:rgb(255,135,0);
+}
+.sno{
+width:30px;
+font-weight:700;
+color:rgb(0,0,0);
+}
+.state{
+width:320px;
+font-weight:800;
+color:rgb(255,135,0);
+border-color:rgb(255,135,0);
+}
+.con, .act, .rec, .dea{
+  width:90px;
+  font-weight:500;
+}
+.con{
+  color: red;
+}
+.act{
+  color: rgb(0, 112, 216);
+}
+.rec{
+  color: green;
+}
+.dea{
+  color: gray;
+}
+.upd{
+  color: orange;
+}
+{% endblock %}
+{% block title %} Home {% endblock %}
+{% block body %}
+<div class="blank"></div>
+
+<section>
+  <div id="carouselExampleIndicators" class="carousel carousel-dark carousel-fade slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+        aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+        aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
+        aria-label="Slide 4"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4"
+        aria-label="Slide 5"></button>
+      <!-- <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="6" aria-label="Slide 7"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="7" aria-label="Slide 8"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="8" aria-label="Slide 9"></button> -->
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'covid\images\banner\banner1.jpg' %}" class="d-block w-100" height="575px"
+          alt="covid-warrior">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'covid\images\banner\banner3.png' %}" class="d-block w-100" height="450px"
+          alt="covid-warrior">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'covid\images\banner\banner2.png' %}" class="d-block w-100" height="450px"
+          alt="covid-warrior">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'covid\images\banner\banner8.jpg' %}" class="d-block w-100" height="450px"
+          alt="covid-warrior">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'covid\images\banner\banner10.jpg' %}" class="d-block w-100" height="450px"
+          alt="covid-warrior">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
+<div class="blank"></div>
+<detail>
+  {% load humanize %}
+  <div class="contain">
+  <div class="row report mx-auto">
+    <div class="col-3 text-center bb" style="color: red;">
+      <h5>Total Cases</h5>
+      <h3>{{summary.confirmed|intcomma }}</h3>
+    </div>
+    <div class="col-3 text-center bb" style="color: rgb(0, 112, 216);">
+      <h5>Active</h5>
+      <h3>{{summary.active|intcomma }}</h3>
+    </div>
+    <div class="col-3 text-center bb" style="color: green;">
+      <h5>Recovered</h5>
+      <h3>{{summary.recovered|intcomma }}</h3>
+    </div>
+    <div class="col-3 text-center bb" style="color: gray;">
+      <h5>Deaths</h5>
+      <h3>{{summary.deaths|intcomma }}</h3>
+    </div>
+  </div></div>
+  
+  <div class="text-center">
+    <h2 class="tit">State-Wise Data</h2>
+</div>
+
+
+<!-- POPUP -->
+{% for st in states|slice:"1:" %}
+<div class="modal fade" id="{{st.statecode}}" style="width:100%;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="width:1200px;">
+      <div class="modal-header" style="height:40px;">
+        <h5 class="modal-title" id="staticBackdropLabel">{{st.state}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          {% for dis, value in district.items %}
+            {% if dis == st.state %}
+              <table class="table text-center">
+                <thead>
+                  <tr class="tr">
+                    <th class="th">S.No.</th>
+                    <th class="th">State/UT</th>
+                    <th class="th">Confirmed</th>
+                    <th class="th">Active</th>
+                    <th class="th">Recovered</th>
+                    <th class="th">Deaths</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% load mathfilters %}
+                  {% for city,detail in value.districtData.items %}
+                    {{city}} - {{detail}}
+                    <!-- <h5>{{city}}</h5> -->
+
+                  <!-- <tr>
+                    <td class="sno">{{forloop.counter}}</td>
+                    <td class="state">
+                      <button style="background-color:black;" type="button" class="btn btn-primary state" data-bs-toggle="modal" data-bs-target="#{{st.statecode}}">
+                      {{city}}
+                    </button></td>
+                    <td class="con">{{district.dis.districtData.city.confirmed|intcomma }}</td>
+                    <td class="act">{{district.dis.districtData.city.active|intcomma }}</td>
+                    <td class="rec">{{district.dis.districtData.city.recovered|intcomma }}</td>
+                    <td class="dea">{{district.dis.districtData.city.deaths|intcomma }}</td>
+                  </tr> -->
+                </tbody>
+              </table>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+  <div class="row rep mx-auto">
+    <table class="table mt-5 text-center">
+      <thead>
+        <tr class="tr">
+          <th class="th">S.No.</th>
+          <th class="th">State/UT</th>
+          <th class="th">Confirmed</th>
+          <th class="th">Active</th>
+          <th class="th">Recovered</th>
+          <th class="th">Deaths</th>
+          <th class="th">Active Ratio</th>
+          <th class="th">Recovery Ratio</th>
+          <th class="th">Fatality Ratio</th>
+          <th class="th">Last update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% load mathfilters %}
+        {% for st in states|slice:"1:" %}
+        <tr>
+          <td class="sno">{{forloop.counter}}</td>
+          <td class="state">
+            <button style="background-color:black;" type="button" class="btn btn-primary state" data-bs-toggle="modal" data-bs-target="#{{st.statecode}}">
+            {{st.state}}
+          </button></td>
+          <td class="con">{{st.confirmed|intcomma }}</td>
+          <td class="act">{{st.active|intcomma }}</td>
+          <td class="rec">{{st.recovered|intcomma }}</td>
+          <td class="dea">{{st.deaths|intcomma }}</td>
+          {% if st.confirmed != "0" %}
+            <td class="act">{{st.active|div:st.confirmed|mul:100|floatformat}} %</td>
+            <td class="rec">{{st.recovered|div:st.confirmed|mul:100|floatformat}} %</td>
+            <td class="dea">{{st.deaths|div:st.confirmed|mul:100|floatformat}} %</td>
+          {% else %}
+            <td class="act">0 %</td>
+            <td class="rec">0 %</td>
+            <td class="dea">0 %</td>
+          {% endif %}
+          <td class="upd">{{st.lastupdatedtime}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+
+  </div>
+</detail>
+{% endblock %}

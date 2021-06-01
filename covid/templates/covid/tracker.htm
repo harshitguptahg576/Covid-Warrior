@@ -1,0 +1,235 @@
+{% extends 'covid\base.htm' %}
+{% load static %}
+{% block script %} 
+<script src="{% static 'covid\JS\chart.js' %}"></script>
+{% endblock %}
+{% block css %}
+.blank{
+  height:5px;
+  background:rgb(255,130,0);
+  }
+.header{
+  margin-top:30px;
+  margin-bottom:40px;
+  color:rgb(255,130,0);
+}
+  .summary{
+  width:90%;
+  font-family: "Georgia", serif;
+  }
+  .summary h6,h3{
+    font-weight:500;
+  }
+  .col{
+    padding-top:40px;
+    padding-bottom:40px;
+  }
+  .tes:hover{
+    background: rgba(150, 0, 215, 0.2);
+  }
+  .con:hover{
+    background: rgba(255, 0, 0, 0.2);
+  }
+  .act:hover{
+    background: rgba(0, 112, 216, 0.2);
+  }
+  .rec:hover{
+     background: rgba(0, 128, 0, 0.2);"
+  }
+  .dea:hover{
+    background: rgba(128, 128, 128, 0.2);
+  }
+    
+{% endblock %}
+{% block title %} Live-Traker {% endblock %}
+{% block body %}
+<div class="blank"></div>
+<div style="width: 90%;" class="contain mx-auto">
+  <div class="header w-100">
+    <img src="{% static 'covid\images\india.png' %}" style="float: left;" alt="" width="80" height="60" ><h1>INDIA</h1>
+    <h6 style="color: gray;">Last updated on {{summary.lastupdatedtime}}</h6>
+  </div>
+  <div class="row summary mx-auto">
+    <div class="col text-center tes" style="color: rgb(150, 0, 215); background: rgba(150, 0, 215, 0.1);">
+      <h6>Total Tested</h6>
+      <h3 class="count">{{tested.totalsamplestested}}</h3>
+    </div>
+    <div class="col text-center  con" style="color: rgb(255, 0, 0);">
+      <h6>Confirmed</h6>
+      <h3 class="count">{{summary.confirmed}}</h3>
+    </div>
+    <div class="col text-center my-auto act" style="color: rgb(0, 112, 216);">
+      <h6>Active</h6>
+      <h3 class="count">{{summary.active}}</h3>
+    </div>
+    <div class="col text-center rec" style="color: rgb(0, 128, 0);">
+      <h6>Recovered</h6>
+      <h3 class="count">{{summary.recovered}}</h3>
+    </div>
+    <div class="col text-center my-auto dea" style="color: gray; ">
+      <h5>Deaths</h5>
+      <h3 class="count">{{summary.deaths}}</h3>
+    </div>
+  <div class="row">
+    <div class="col" style="margin-left: -50px;">
+      <canvas id="confirmed" width="1150" height="700" style="background: rgba(255, 0, 0, 0.1);"></canvas>
+      <canvas id="active" width="1150" height="700"></canvas>
+      <canvas id="recovered" width="1150" height="700"></canvas>
+      <canvas id="deaths" width="1150" height="700"></canvas>
+      <script>
+        // confirmed data
+        var con = document.getElementById('confirmed').getContext('2d');
+        var myChart = new Chart(con, {
+            type: 'bar',
+            data: {
+                labels: [{% for st in states|slice:"1:" %} "{{st.state}}", {% endfor %}],
+                datasets: [{
+                    label: 'Confirmed',
+                    data: [{% for st in states|slice:"1:" %} "{{st.confirmed}}", {% endfor %}],
+                    backgroundColor: [
+                        'rgba(255, 0,0, 0.6)'
+                    ],
+                    borderColor: [
+                        'red'
+                    ],
+                    borderWidth: 1.5
+                }]
+            },
+            options: {
+              responsive: false,
+              animation:{
+                  delay:1250,
+              },
+              interaction: {
+                        intersect: false,
+                        mode: 'index',
+                          },
+              plugins:{
+                legend:{align:'end'}
+              },
+              indexAxis: 'x',
+                scales: {
+                    y: {
+                        beginAtZero: true
+                        ,grid:{
+                          drawBorder: false,
+                          color: 'rgb(255,0,0,0.2)',
+                        }
+                    },
+                    x: {  grid:{
+                      display:false,
+
+                    },
+                          ticks: {
+                            color: 'red',
+                          }
+                    }
+                }
+            }
+        });
+        // Active data
+        var act = document.getElementById('active').getContext('2d');
+        var myChart = new Chart(act, {
+            type: 'bar',
+            data: {
+                labels: [{% for st in states|slice:"1:" %} "{{st.state}}", {% endfor %}],
+                datasets: [{
+                    label: 'Active',
+                    data: [{% for st in states|slice:"1:" %} "{{st.active}}", {% endfor %}],
+                    backgroundColor: [
+                        'rgba(0, 112, 216, 0.8)'
+                    ],
+                    borderColor: [
+                        'blue'
+                    ],
+                    borderWidth: 1.5
+                }]
+            },
+            options: {
+              responsive: false,
+              indexAxis: 'x',
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        // Recovered data
+        var rec = document.getElementById('recovered').getContext('2d');
+        var myChart = new Chart(rec, {
+            type: 'bar',
+            data: {
+                labels: [{% for st in states|slice:"1:" %} "{{st.state}}", {% endfor %}],
+                datasets: [
+                {
+                    label: 'Recovered',
+                    data: [{% for st in states|slice:"1:" %} "{{st.recovered}}", {% endfor %}],
+                    backgroundColor: [
+                        'rgba(0, 128,0, 0.6)'
+                    ],
+                    borderColor: [
+                        'green'
+                    ],
+                    borderWidth: 1.5
+                }]
+            },
+            options: {
+              responsive: false,
+              indexAxis: 'x',
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        // Death data
+        var dea = document.getElementById('deaths').getContext('2d');
+        var myChart = new Chart(dea, {
+            type: 'bar',
+            data: {
+                labels: [{% for st in states|slice:"1:" %} "{{st.state}}", {% endfor %}],
+                datasets: [{
+                    label: 'Deaths',
+                    data: [{% for st in states|slice:"1:" %} "{{st.deaths}}", {% endfor %}],
+                    backgroundColor: [
+                        'rgba(128, 128,128, 0.6)'
+                    ],
+                    borderColor: [
+                        'gray'
+                    ],
+                    borderWidth: 1.5
+                }]
+            },
+            options: {
+              responsive: false,
+              indexAxis: 'x',
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        </script>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<script>
+  $('.count').each(function () {
+  $(this).prop('Counter',0).animate({
+      Counter: $(this).text()
+  }, {
+      duration: 2000,
+      easing: 'swing',
+      step: function (now) {
+          $(this).text(Math.ceil(now));
+      }
+  });
+});
+</script>
+{% endblock %}

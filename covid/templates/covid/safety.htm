@@ -1,0 +1,150 @@
+{% extends 'covid\base.htm' %}
+{% load static %}
+{% block css %}
+
+.Title{
+height: 80px;
+background:url("{% static 'covid\images\breadcrumbs.jpg'%}") ;
+background-size:cover;
+}
+.blank{
+height: 5px;
+background:rgb(255,140,0);
+}
+.bread{
+background-color:black;
+color: rgb(255,140,0);
+font-size: 18px;
+font-weight: 700;
+width:200px;
+}
+.card{
+background-color:rgb(255,130,0);
+box-shadow: 0 0 10px 5px;
+margin: 20px auto 20px auto;
+width: 90%;
+height:680px;
+}
+.col-md-4
+{
+display: inline-block;
+}
+.col-md-4 img{
+border: 2px solid black;
+margin-top:10px;
+width: 225px;
+height: 245px;
+}
+.list-group-item{
+font-size:25px;
+font-weight:700;
+text-align:center;
+}
+.row{
+margin: 50px auto 20px auto;
+width: 80%;
+}
+.tit{
+background-color:black;
+color: rgb(255,140,0);
+font-size: 25px;
+font-weight: 700;
+height: 40px;
+}
+.tit::before{
+content:"___ __ _";
+font-size:35px;
+font-weight: 100%;
+color:rgb(255,140,0);
+margin:-5px 0 0 20px;
+position:absolute;
+}
+.cart{
+background-color:rgb(0,0,0);
+font-weight:700;
+color:rgb(255,130,0);
+}
+.filter{
+float:right;
+margin-right:30px;
+margin-top:8px;
+}
+.filter lable{
+font-size:22px;
+font-weight:600;
+}
+.filter select{
+background-color:rgb(255,140,0);
+font-weight:500;
+width:180px;
+height:32px;
+}
+select:focus > option:checked{ 
+background-color:black;
+color: rgb(255,140,0);
+}
+input[type=submit]{
+    background:black;
+    color:rgb(255,135,0);
+    font-weight:500;
+}
+{% endblock %}
+{% block title %} SAFETY {% endblock %}
+{% block body %}
+<div class="blank"></div>
+<div class="Title w-100 ">
+    <center>
+        <br>
+        <div class="bread">
+            <a style="color: white; font-size: 16px; font-weight: 700;" href="/">HOME</a>
+            <span class="divider">/</span>
+            COVID-SHOP
+        </div>
+    </center>
+</div>
+<div class="blank"></div>
+<section>
+    <div class="text-center mt-5">
+        <h2 class="tit">{{title}}</h2>
+    </div>
+    <div class="filter">
+        <form action="" method="GET">
+            <lable for="category">Filter:</lable>
+            <select id="category" name="select">
+                <option class="dropdown-item" value="empty" selected>Select View</option>
+                <option class="dropdown-item" value="all">All Products</option>
+                <option class="dropdown-item" value="category">Category-Wise</option>
+            </select>
+            <input type="submit" value="Apply">
+        </form>
+    </div>
+    {% for category in product %}
+    <div class="row">
+        <h2>
+            {% if product|length > 1 %}
+            {{category.0.category}}
+            {% endif %}
+        </h2>
+        {% for pro in category %}
+        <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
+            <div class="card">
+                <img src="\media\{{pro.product_image}}" class="mx-auto" alt="...">
+                <div class="card-body">
+                    <h4 class="card-title">{{pro.product_name}}</h4>
+                    <p class="card-text"> {{pro.product_desc}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <h5 style="display: inline-block;">Price:&nbsp;</h5>{{pro.product_price}}
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <button href="#" class="cart w-100 text-center">Add To Cart</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}
