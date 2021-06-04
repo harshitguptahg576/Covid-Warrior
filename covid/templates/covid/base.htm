@@ -6,29 +6,79 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="{% static 'covid\CSS\style.css' %}" rel="stylesheet">
     <title>Covid-Warriors |{% block title %} {% endblock %}</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     {% block script %} {% endblock %}
     
     <style>
+        html{
+            font-size: 62.5%;
+        }
         #topbar {
             padding: 0;
         }
-
+        .logo-text{
+            margin-top: 2.0rem;
+            margin-left: -2.0rem;
+            font-size: 1.75rem;
+            font-weight: 500;
+            float: left;
+        }
+        .menu{
+            font-size: 1.6rem;
+        }
         #drop {
             background-color: rgb(255, 140, 0) !important;
+            width: 180rem;
         }
-
+        .log{
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        .dropdown-item{
+            padding: 1rem;
+            font-size: 2.0rem;
+        }
         .dropdown-item:hover {
             background: black;
             color: rgb(255, 140, 0);
+        }
+        .menu-btn{
+            display: none;
+        }
+        @media(max-width:1048px){
+            html{
+                font-size: 58%;
+            }
+            .log{
+                display: none;
+            }
+        }
+        @media(max-width:991px){
+            html{
+                font-size: 50%;
+            }
+            .login{
+                display: none;
+            }
+            .menu-btn{
+                display: block;
+                background: rgb(255, 140, 0); 
+                margin-left: 2rem;
+                width: 4rem;
+                height: 3rem;
+            }
+            .navbar-brand{
+                margin-left: -2rem;
+            }
+            
         }
         {% block css %} {% endblock %}
     
@@ -38,22 +88,40 @@
 <body>
     <header>
         <nav id="topbar" class="navbar navbar-dark ">
-            <div style="height: 23px; width: 100%; background-color: rgb(255, 140, 0)">
-                <marquee behavior="sliding" direction="left" scrollamount="7">| STAY SAFE STAY HOME | Wash Your Hands |
+            <div style="height: 2.25rem; width: 100%; background-color: rgb(255, 140, 0)">
+                <marquee behavior="sliding" direction="left" scrollamount="7" style="font-size: 1.5rem;">| STAY SAFE STAY HOME | Wash Your Hands |
                     Wear
                     Mask Properly | Maintain Social Distancing | Fight Like A Warrior |</marquee>
             </div>
         </nav>
         <nav id="topbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container col-3">
+            <button class="menu-btn" type="button" onclick="btn()">
+                <i class="fa fa-bars" aria-hidden="true" style="font-size: 1.5rem;"></i>
+              </button>
+              <script>
+                function btn() {
+                    var menu = document.getElementById("navbar").style;
+                    if ( menu.display == "block") 
+                        {
+                            menu.display = "none";
+                        }
+                    else{
+                            menu.display = "block";
+                            menu.textAlign = "center";
+                            menu.padding= "2rem";
+                        }
+                  
+                }
+                </script>
+            <div class="container" style="width: 26rem;">
                 <a class="navbar-brand" href="/">
-                    <img src="{% static 'covid\images\logo1.jfif' %}" style="float: left;" alt="" width="120"
-                        height="60" class="d-inline-block align-text-top">
-                    <p style="margin-top: 15px; margin-left: -20px; float: left;">WARRIORS</p>
+                    <img src="{% static 'covid\images\logo1.jfif' %}" style="float: left; margin-left: 1.8rem;" alt="logo" width="115rem"
+                        height="65rem" class="d-inline-block align-text-top">
+                    <p class="logo-text">WARRIORS</p>
                 </a>
             </div>
-            <div class="collapse navbar-collapse col-6" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav mx-auto menu">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">&#127968;Home</a>
                     </li>
@@ -80,23 +148,25 @@
                     </li>
                 </ul>
             </div>
-            <div class="container col-3">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+            <div class="login">
+            <div class="container col-2 mx-auto" style="width: 22.5rem;">
+                <ul class="navbar-nav" style="padding-right: 3rem; float:right">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/login/"><i class="fa fa-user-circle" style="font-size: 35px;"
+                        <a class="nav-link active" href="/login/"><i class="fa fa-user-circle" style="font-size: 3.2rem;"
                                 aria-hidden="true"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active mt-1" href="#">Harshit Gupta</a>
+                        <a class="nav-link active log" href="#">Harshit Gupta</a>
                     </li>
                 </ul>
             </div>
+        </div>
         </nav>
     </header>
     {% block body %} {% endblock %}
-    <footer class="container-fluid bg-dark text-center p-2 mt-5">
-        <small class="text-white">Copyright &copy; 2021 || Designed For Mini-Project || </small><br>
-        <img src="{% static 'covid/images/payment.png' %}" alt="" srcset="" class="img-fluid" height="2px">
+    <footer class="container-fluid bg-dark text-center p-1 mt-5">
+        <small class="text-white p-4" style="font-size: 1.3rem;">Copyright &copy; 2021 || Designed For Mini-Project || </small><br>
+        <img src="{% static 'covid/images/payment.png' %}" alt="pay" class="img-fluid" height="0.15rem">
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
