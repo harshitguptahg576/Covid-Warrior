@@ -17,10 +17,10 @@ def home(request):
         states=[{ "loc": "", "discharged": 0, "deaths": 0, "totalConfirmed": 0 }]
         district={ }
         param={"summary":summary,"states":states, "district":district}
-    return render(request, 'covid\home.htm',param)
+    return render(request, 'covid/home.htm',param)
 
 def centers(request):
- return render(request, 'covid\centers.htm')
+ return render(request, 'covid/centers.htm')
 
 def tracker(request):
     try:
@@ -33,7 +33,7 @@ def tracker(request):
     except:
         summary={"total":0,"active":0,"recovered":0,"death":0}
         param={"summary":summary}
-    return render(request, 'covid\\tracker.htm',param)
+    return render(request, 'covid/tracker.htm',param)
 
 def safety(request):
     select=request.GET.get('select','blank')
@@ -51,24 +51,24 @@ def safety(request):
         title="All Products"
         products= [Product.objects.all()]
         param= {"product":products, "title":title}
-    return render(request, 'covid\safety.htm',param)
+    return render(request, 'covid/safety.htm',param)
 
 def tips(request):
- return render(request, 'covid\\tips.htm')
+ return render(request, 'covid/tips.htm')
 
 def about(request):
- return render(request, 'covid\\about.htm')
+ return render(request, 'covid/about.htm')
 
 def login(request):
- return render(request, 'covid\login.htm')
+ return render(request, 'covid/login.htm')
 
 def hathras(request):
- return render(request, 'covid\hathras.htm')
+ return render(request, 'covid/hathras.htm')
 
 def mathura(request):
     centers= Center.objects.filter(city="Mathura")
     param={"centers":centers}
-    return render(request, 'covid\mathura.htm',param)
+    return render(request, 'covid/mathura.htm',param)
 
 def aligarh(request):
- return render(request, 'covid\\aligarh.htm')
+ return render(request, 'covid/aligarh.htm')
