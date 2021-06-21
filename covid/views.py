@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Product
+from .models import Center
 import requests
 
 def home(request):
@@ -65,7 +66,9 @@ def hathras(request):
  return render(request, 'covid\hathras.htm')
 
 def mathura(request):
- return render(request, 'covid\mathura.htm')
+    centers= Center.objects.filter(city="Mathura")
+    param={"centers":centers}
+    return render(request, 'covid\mathura.htm',param)
 
 def aligarh(request):
  return render(request, 'covid\\aligarh.htm')

@@ -1,16 +1,12 @@
-{% extends 'covid\base.htm' %}
+{% extends 'covid/base.htm' %}
 {% load static %}
 {% block script %} 
 <script src="{% static 'covid\JS\chart.js' %}"></script>
 {% endblock %}
 {% block css %}
-.blank{
-  height:5px;
-  background:rgb(255,130,0);
-  }
 .header{
-  margin-top:30px;
-  margin-bottom:40px;
+  margin-top:3rem;
+  margin-bottom:4rem;
   color:rgb(255,130,0);
 }
   .summary{
@@ -20,62 +16,283 @@
   .summary h6,h3{
     font-weight:500;
   }
+  h6{
+    font-size:1.6rem;
+  }
+  h3{
+    font-size:2.1rem;
+  }
   .col{
-    padding-top:40px;
-    padding-bottom:40px;
+    padding-top:4rem;
+    padding-bottom:4rem;
   }
   .tes:hover{
     background: rgba(150, 0, 215, 0.2);
   }
   .con:hover{
     background: rgba(255, 0, 0, 0.2);
+    cursor:pointer;
   }
   .act:hover{
     background: rgba(0, 112, 216, 0.2);
+    cursor:pointer;
   }
   .rec:hover{
-     background: rgba(0, 128, 0, 0.2);"
+     background: rgba(0, 128, 0, 0.2);
+     cursor:pointer;
   }
   .dea:hover{
     background: rgba(128, 128, 128, 0.2);
+    cursor:pointer;
   }
-    
+  .title-pie{
+    position: absolute;
+    margin-top: 158.5px;
+    margin-left: 124.5px;
+  }
+ 
+  
 {% endblock %}
 {% block title %} Live-Traker {% endblock %}
 {% block body %}
 <div class="blank"></div>
 <div style="width: 90%;" class="contain mx-auto">
   <div class="header w-100">
-    <img src="{% static 'covid\images\india.png' %}" style="float: left;" alt="" width="80" height="60" ><h1>INDIA</h1>
-    <h6 style="color: gray;">Last updated on {{summary.lastupdatedtime}}</h6>
+    <img src="{% static 'covid\images\india.png' %}" style="float: left;" alt="IND" width="90" height="70" ><h1 style="font-size:3rem; font-weight:600">INDIA</h1>
+    <h6 style="color: gray; font-size: 1.2rem;">Last updated on {{summary.lastupdatedtime}}</h6>
   </div>
   <div class="row summary mx-auto">
     <div class="col text-center tes" style="color: rgb(150, 0, 215); background: rgba(150, 0, 215, 0.1);">
       <h6>Total Tested</h6>
       <h3 class="count">{{tested.totalsamplestested}}</h3>
     </div>
-    <div class="col text-center  con" style="color: rgb(255, 0, 0);">
+    <div id="conf" class="col text-center  con" style="color: rgb(255, 0, 0);">
       <h6>Confirmed</h6>
       <h3 class="count">{{summary.confirmed}}</h3>
     </div>
-    <div class="col text-center my-auto act" style="color: rgb(0, 112, 216);">
+    <div id="acti" class="col text-center act" style="color: rgb(0, 112, 216);">
       <h6>Active</h6>
       <h3 class="count">{{summary.active}}</h3>
     </div>
-    <div class="col text-center rec" style="color: rgb(0, 128, 0);">
+    <div id="reco" class="col text-center rec" style="color: rgb(0, 128, 0);">
       <h6>Recovered</h6>
       <h3 class="count">{{summary.recovered}}</h3>
     </div>
-    <div class="col text-center my-auto dea" style="color: gray; ">
+    <div id="deat" class="col text-center dea" style="color: gray; ">
       <h5>Deaths</h5>
       <h3 class="count">{{summary.deaths}}</h3>
     </div>
+    </div>
+    {% load mathfilters %}
+    <div class="row mt-5">
+      <div class="col con" style="color: rgb(255, 0, 0); height: fit-content;">
+        <div class="title-pie">
+          <h3> {{summary.confirmed|div:tested.totalsamplestested|mul:100|floatformat}}%</h3>
+        </div>
+        <canvas id="pos-ratio" width="280" height="300" style=" padding: 1.5rem 0.5rem; margin: auto;"></canvas>
+        <script>
+          var con = document.getElementById('pos-ratio').getContext('2d');
+          var myChart = new Chart(con, {
+              type: 'doughnut',
+              data: {
+                labels: [
+                  'Positivity Ratio'
+
+                ],
+                datasets: [{
+                  data: [{{summary.confirmed}}, {{tested.totalsamplestested|sub:summary.confirmed}}],
+                  backgroundColor: [
+                    'rgb(255,0,0)',
+                    'rgba(255,0,0,0.1)',
+                  ],
+                  borderColor: [
+                        'rgb(255,0,0,0.2)'
+                    ],
+                  borderWidth: 1.5,
+                  hoverOffset: 10,
+                  cutout: '60%',
+                  radius:'90%',
+                  rotation:25,
+                }]
+              },
+              options:{
+                responsive: false,
+                plugins: {
+                  legend: {
+                    labels: {
+                      font: {
+                        size: 15,
+                        weight:600,
+                      },
+                      boxWidth:30,
+                      padding:15,
+                      color:"black"
+                    }
+                  }
+                },
+                animation:{
+                  animateScale:true
+                }
+              }
+            }
+          );
+        </script>
+      </div>
+      <div class="col act" style="color: rgb(0, 112, 216); height: fit-content;">
+        <div class="title-pie">
+          <h3> {{summary.active|div:summary.confirmed|mul:100|floatformat}}%</h3>
+        </div>
+        <canvas id="act-ratio" width="280" height="300" style=" padding: 1.5rem 0.5rem; margin: auto;"></canvas>
+        <script>
+          var con = document.getElementById('act-ratio').getContext('2d');
+          var myChart = new Chart(con, {
+              type: 'doughnut',
+              data: {
+                labels: [
+                  'Active Ratio'
+                ],
+                datasets: [{
+                  data: [{{summary.active}}, {{summary.confirmed|sub:summary.active}}],
+                  backgroundColor: [
+                    'rgb(0, 112, 216)',
+                    'rgba(0, 112, 216, 0.1)',
+                  ],
+                  borderColor: [
+                        'rgba(0, 112, 216, 0.2)'
+                    ],
+                  borderWidth: 1.5,
+                  hoverOffset: 10,
+                  cutout: '60%',
+                  radius:'90%',
+                  rotation:25,
+                }]
+              },
+              options:{
+                responsive: false,
+                plugins: {
+                  legend: {
+                    labels: {
+                      font: {
+                        size: 15,
+                        weight:600,
+                      },
+                      boxWidth:30,
+                      padding:15,
+                      color:"black"
+                    }
+                  }
+                }
+              }
+            }
+          );
+        </script>
+      </div>
+      <div class="col rec" style="color: rgb(0, 128, 0);  height: fit-content;">
+        <div class="title-pie">
+          <h3> {{summary.recovered|div:summary.confirmed|mul:100|floatformat}}%</h3>
+        </div>
+        <canvas id="rec-ratio" width="280" height="300" style=" padding: 1.5rem 0.5rem; margin: auto;"></canvas>
+        <script>
+          var con = document.getElementById('rec-ratio').getContext('2d');
+          var myChart = new Chart(con, {
+              type: 'doughnut',
+              data: {
+                labels: [
+                  'Recovery Ratio'
+                ],
+                datasets: [{
+                  data: [{{summary.recovered}}, {{summary.confirmed|sub:summary.recovered}}],
+                  backgroundColor: [
+                    'rgb(0, 128, 0,0.8)',
+                    'rgba(0, 128, 0, 0.1)',
+                  ],
+                  borderColor: [
+                        'rgba(0, 128, 0, 0.2)'
+                    ],
+                  borderWidth: 1.5,
+                  hoverOffset: 10,
+                  cutout: '60%',
+                  radius:'90%',
+                  rotation:25,
+                }]
+              },
+              options:{
+                responsive: false,
+                plugins: {
+                  legend: {
+                    labels: {
+                      font: {
+                        size: 15,
+                        weight:600,
+                      },
+                      boxWidth:30,
+                      padding:15,
+                      color:"black"
+                    }
+                  }
+                }
+              }
+            }
+          );
+        </script>
+      </div>
+      <div class="col dea" style="color: gray;  height: fit-content;">
+          <div class="title-pie">
+            <h3> {{summary.deaths|div:summary.confirmed|mul:100|floatformat}}%</h3>
+          </div>
+          <canvas id="dea-ratio" width="280" height="300" style=" padding: 1.5rem 0.5rem; margin: auto;"></canvas>
+          <script>
+            var con = document.getElementById('dea-ratio').getContext('2d');
+            var myChart = new Chart(con, {
+                type: 'doughnut',
+                data: {
+                  labels: [
+                    'Fatality Ratio'
+                  ],
+                  datasets: [{
+                    data: [{{summary.deaths}}, {{summary.confirmed|sub:summary.deaths}}],
+                    backgroundColor: [
+                      'gray',
+                      'rgba(128, 128, 128, 0.1)',
+                    ],
+                    borderColor: [
+                          'rgba(128, 128, 128, 0.3)'
+                      ],
+                    borderWidth: 1.5,
+                    hoverOffset: 10,
+                    cutout: '60%',
+                    radius:'90%',
+                    rotation:25,
+                  }]
+                },
+                options:{
+                  responsive: false,
+                  plugins: {
+                    legend: {
+                      labels: {
+                        font: {
+                          size: 15,
+                          weight:600,
+                        },
+                        boxWidth:30,
+                        padding:15,
+                        color:"black"
+                      }
+                    }
+                  }
+                }
+              }
+            );
+          </script>
+        </div>
+      </div>
+
   <div class="row">
-    <div class="col" style="margin-left: -50px;">
-      <canvas id="confirmed" width="1150" height="700" style="background: rgba(255, 0, 0, 0.1);"></canvas>
-      <canvas id="active" width="1150" height="700"></canvas>
-      <canvas id="recovered" width="1150" height="700"></canvas>
-      <canvas id="deaths" width="1150" height="700"></canvas>
+    <div class="col">
+      <canvas id="confirmed"  class="conf" width="1150" height="700" style="background: rgba(255, 0, 0, 0.1); padding: 1.5rem 2.5rem;"></canvas>
+      <canvas id="active"  class="acti" width="1150" height="700" style="background: rgba(0, 112, 216, 0.1); padding: 1.5rem 2.5rem;"></canvas>
+      <canvas id="recovered" class="reco" width="1150" height="700" style="background: rgba( 0,128, 0, 0.1); padding: 1.5rem 2.5rem;"></canvas>
+      <canvas id="deaths" class="deat" width="1150" height="700" style="background: rgba(128,128,128, 0.1); padding: 1.5rem 2.5rem;"></canvas>
       <script>
         // confirmed data
         var con = document.getElementById('confirmed').getContext('2d');
@@ -96,7 +313,7 @@
                 }]
             },
             options: {
-              responsive: false,
+              responsive: true,
               animation:{
                   delay:1250,
               },
@@ -146,11 +363,33 @@
                 }]
             },
             options: {
-              responsive: false,
+              responsive: true,
+              animation:{
+                  delay:1250,
+              },
+              interaction: {
+                        intersect: false,
+                        mode: 'index',
+                          },
+              plugins:{
+                legend:{align:'end'}
+              },
               indexAxis: 'x',
                 scales: {
                     y: {
                         beginAtZero: true
+                        ,grid:{
+                          drawBorder: false,
+                          color: 'rgb(0, 112, 216, 0.2)',
+                        }
+                    },
+                    x: {  grid:{
+                      display:false,
+
+                    },
+                          ticks: {
+                            color: 'blue',
+                          }
                     }
                 }
             }
@@ -175,11 +414,33 @@
                 }]
             },
             options: {
-              responsive: false,
+              responsive: true,
+              animation:{
+                  delay:1250,
+              },
+              interaction: {
+                        intersect: false,
+                        mode: 'index',
+                          },
+              plugins:{
+                legend:{align:'end'}
+              },
               indexAxis: 'x',
                 scales: {
                     y: {
                         beginAtZero: true
+                        ,grid:{
+                          drawBorder: false,
+                          color: 'rgb(0, 128,0, 0.2)',
+                        }
+                    },
+                    x: {  grid:{
+                      display:false,
+
+                    },
+                          ticks: {
+                            color: 'green',
+                          }
                     }
                 }
             }
@@ -203,28 +464,103 @@
                 }]
             },
             options: {
-              responsive: false,
+              responsive: true,
+              animation:{
+                  delay:1250,
+              },
+              interaction: {
+                        intersect: false,
+                        mode: 'index',
+                          },
+              plugins:{
+                legend:{align:'end'}
+              },
               indexAxis: 'x',
                 scales: {
                     y: {
                         beginAtZero: true
+                        ,grid:{
+                          drawBorder: false,
+                          color: 'rgb(128,128,128, 0.2)',
+                        }
+                    },
+                    x: {  grid:{
+                      display:false,
+
+                    },
+                          ticks: {
+                            color: 'grey',
+                          }
                     }
                 }
             }
         });
-        </script>
-    </div>
+      </script>
   </div>
 </div>
 </div>
+<script>
+  const test = document.querySelector('.tes');
+  const conf = document.querySelector('.con');
+  const acti = document.querySelector('.act');
+  const reco = document.querySelector('.rec');
+  const deat = document.querySelector('.dea');
+  
+  conf.addEventListener('click',()=>{
+    test.style.backgroundColor = "#fff";
+    conf.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
+    acti.style.backgroundColor = "#fff";
+    reco.style.backgroundColor = "#fff";
+    deat.style.backgroundColor = "#fff";
+    document.querySelector('.conf').style.display = "block";
+    document.querySelector(".acti").style.display = "none";
+    document.querySelector('.reco').style.display = "none";
+    document.querySelector('.deat').style.display = "none";
+  });
 
+  acti.addEventListener('click',()=>{
+    test.style.backgroundColor = "#fff";
+    conf.style.backgroundColor = "#fff";
+    acti.style.backgroundColor = "rgba(0, 112, 216, 0.2)";
+    reco.style.backgroundColor = "#fff";
+    deat.style.backgroundColor = "#fff";
+    document.querySelector('.conf').style.display = "none";
+    document.querySelector('.acti').style.display = "block";
+    document.querySelector('.reco').style.display = "none";
+    document.querySelector('.deat').style.display = "none";
+  });
+
+  reco.addEventListener('click',()=>{
+    test.style.backgroundColor = "#fff";
+    conf.style.backgroundColor = "#fff";
+    acti.style.backgroundColor = "#fff";
+    reco.style.backgroundColor = "rgba(0, 128, 0, 0.2)";
+    deat.style.backgroundColor = "#fff";
+    document.querySelector('.conf').style.display = "none";
+    document.querySelector('.acti').style.display = "none";
+    document.querySelector('.reco').style.display = "block";
+    document.querySelector('.deat').style.display = "none";
+  });
+
+  deat.addEventListener('click',()=>{
+    test.style.backgroundColor = "#fff";
+    conf.style.backgroundColor = "#fff";
+    acti.style.backgroundColor = "#fff";
+    reco.style.backgroundColor = "#fff";
+    deat.style.backgroundColor = "rgba(128, 128, 128, 0.2)";
+    document.querySelector('.conf').style.display = "none";
+    document.querySelector('.acti').style.display = "none";
+    document.querySelector('.reco').style.display = "none";
+    document.querySelector('.deat').style.display = "block";
+  });
+</script>
 
 <script>
   $('.count').each(function () {
   $(this).prop('Counter',0).animate({
       Counter: $(this).text()
   }, {
-      duration: 2000,
+      duration: 3000,
       easing: 'swing',
       step: function (now) {
           $(this).text(Math.ceil(now));

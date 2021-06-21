@@ -19,6 +19,31 @@ class Product(models.Model):
     def __str__(self):
         return self.product_name
 
+
+class Center(models.Model):
+    center_id = models.AutoField
+    hospital_name = models.CharField(max_length=70)
+    city = models.CharField(max_length=30)
+    pincode = models.CharField(max_length=6)
+    address = models.CharField(max_length=70)
+    public = models.BooleanField()
+    mobile = models.CharField(max_length=10)
+    date = models.DateField(auto_now=True)
+    hospital_image = models.ImageField(upload_to="static\images\hosp")
+
+    total_iso_bed = models.SmallIntegerField()
+    iso_bed = models.SmallIntegerField()
+
+    total_oxy_bed = models.SmallIntegerField()
+    oxy_bed = models.SmallIntegerField()
+
+    total_icu_bed = models.SmallIntegerField()
+    icu_bed = models.SmallIntegerField()
+
+
+    def __str__(self):
+        return self.hospital_name
+
 # class State(models.Model):
 
 #     state=models.CharField(max_length=20)
