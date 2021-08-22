@@ -1,8 +1,182 @@
-{% extends 'covid\base.htm' %}
+{% extends 'covid/base.htm' %}
+{% load static %}
 {% block css %}
+body{
+    background:rgb(25,25,25);
+    font-size:1.5rem;
+}
+  .Title{
+    height: 8.5rem;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:url("{% static 'covid\images\breadcrumbs1.jpg'%}") ;
+    background-size:cover;
+    margin-bottom:0;
+    }
+.alert{
+color: black; 
+font-size:1.8rem; 
+font-weight: 700;
+text-align:center;
+}
+.tim{
+    background-color:black;
+    color: rgb(255,140,0);
+    font-size: 1.9rem;
+    padding:0.4rem 2rem;
+    text-align:center;
+    font-weight: 700;
+    border-top-left-radius: 1.5rem ;
+    border-bottom-right-radius: 1.5rem ;
+    }
+.tit{
+        background-color:rgb(255,140,0);
+        color: black;
+        margin:1% 12%;
+        width:76%;
+        font-size: 2.5rem;
+        font-weight: 700;
+        height: 4.75rem;
+        padding:0.5rem;
+        border-top-right-radius: 2rem ;
+        border-bottom-left-radius: 2rem ;
+        }
+    .hosp{ 
+        margin: 5rem 0.5rem;
+        box-shadow: 0 0 1rem 0.5rem rgb(255,130,0); 
+    }
+    
 
+    .card{
+        border: 0.2rem solid black;
+    }
+    .card-body{
+        padding: 2rem 0.5rem;
+        background-color:rgba(255,145,0,0.75);
+    }
+    td{
+        font-weight:600;
+    }
 {% endblock %}
-{% block title %} ALIGARH {% endblock %}
+{% block title %} MATHURA {% endblock %}
 {% block body %}
   
+<div class="blank"></div>
+
+<div class="alert Title w-100" role="alert">
+    <p class="tim"> <span id="datetime"></span></p>
+
+<script>
+function showTime(){
+    var date = new Date();
+    var h = date.getHours(); 
+    var m = date.getMinutes(); 
+    var s = date.getSeconds(); 
+    var d = date.toDateString();
+    var session = "AM";
+    if(h == 0){
+        h = 12;
+    }
+    if(h > 12){
+        h = h - 12;
+        session = "PM";
+    }
+    m = (m < 10) ? "0" + m : m;
+    s = (s < 10) ? "0" + s : s;
+    var time = d + ",  " + h + ":" + m + ":" + s + " " + session;
+    document.getElementById("datetime").innerText = time;
+    document.getElementById("datetime").textContent = time;
+    setTimeout(showTime, 1000);   
+}
+showTime();
+</script>
+ </div>
+<div class="blank"></div>
+<div class="text-center mt-5">
+    <h2 class="tit">{{title}}</h2>
+</div>
+<div class="container-fluid mt-5" style="width: 90%;">
+    {% for hosp in centers %}
+    <div class="card-group hosp">
+        <div class="card text-center">
+            <div class="card-body" >
+                <h5 class="card-title" style="font-size: 2.3rem;">
+                    <p style="float: left; font-size: 3rem;">&#127973;</p>{{hosp.hospital_name}}</h5>
+                <p class="card-text pb-3" style="font-size: 1.7rem; text-decoration: underline;">
+                    {% if hosp.public %}
+                        Public
+                    {% else %}
+                        Private
+                    {% endif %}
+                
+                </p>
+                <p class="card-text" style="font-size: 1.5rem; font-weight: 500;">
+                    <p style="float: left; font-size: 2rem;">&#128205;</p>
+                    {{hosp.address}},&nbsp; {{hosp.city}} &nbsp;- &nbsp; {{hosp.pincode}}
+                </p>
+                <p class="card-text" style="font-size: 1.5rem; font-weight: 500;">
+                    &#128222; &nbsp; {{hosp.mobile}}
+                </p>
+                <p class="card-text" style="font-size: 1.3rem;">Last updated on {{hosp.date}}</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body" style="padding: 1rem;">
+            <img src="\media\{{hosp.hospital_image}}" class="mx-auto d-block" 
+            style="height: 26rem; width: 35rem;" alt="hospital LOGO">
+        </div>
+    </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title pb-4" style="font-size: 2rem;">Availability of beds</h5>
+                <div style="overflow:auto">
+                <table class="table table-bordered m-auto" style="width: 80%; border: 0.1rem solid black;">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th colspan="3">
+                                <div>&#128719; Total Bed</div>
+                                <div style="font-size: 1.7rem; font-weight: 700;">{{hosp.total_iso_bed|add:hosp.total_oxy_bed|add:hosp.total_icu_bed}}</div>
+                            </th>
+                            <th colspan="3">
+                                <div>&#128716; Available Bed</div>
+                                <div style="font-size: 1.7rem; font-weight: 700;">{{hosp.iso_bed|add:hosp.oxy_bed|add:hosp.icu_bed}}</div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="col" colspan="2" style="background-color: black; color: rgb(255, 140, 0);">L1</th>
+                            <th scope="col" colspan="2" style="background-color: black; color: rgb(255, 140, 0);">L2</th>
+                            <th scope="col" colspan="2" style="background-color: black; color: rgb(255, 140, 0);">L1</th>
+
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td colspan="2" style="background-color: powderblue; font-size: 1.3rem;" >Isolation</td>
+                        <td colspan="2" style="background-color: powderblue; font-size: 1.3rem;">Isolation (oxygen)</td>
+                        <td colspan="2" style="background-color: powderblue; font-size: 1.3rem;">HDU/ICU Bed</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:rgb(255, 255, 0,0.6);">Total Bed</td>
+                        <td style="background-color: rgb(0,200,0,0.6);">Available Bed</td>
+                        <td style="background-color:rgb(255, 255, 0,0.6);">Total Bed</td>
+                        <td style="background-color: rgb(0,200,0,0.6);">Available Bed</td>
+                        <td style="background-color:rgb(255, 255, 0,0.6);">Total Bed</td>
+                        <td style="background-color: rgb(0,200,0,0.6);">Available Bed</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:rgb(255, 255, 0,0.6);">{{hosp.total_iso_bed}}</td>
+                        <td style="background-color: rgb(0,200,0,0.6);">{{hosp.iso_bed}}</td>
+                        <td style="background-color:rgb(255, 255, 0,0.6);">{{hosp.total_oxy_bed}}</td>
+                        <td style="background-color: rgb(0,200,0,0.6);">{{hosp.oxy_bed}}</td>
+                        <td style="background-color:rgb(255, 255, 0,0.6);">{{hosp.total_icu_bed}}</td>
+                        <td style="background-color: rgb(0,200,0,0.6);">{{hosp.icu_bed}}</td>
+                    </tr>
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+</div> 
 {% endblock %}

@@ -82,11 +82,17 @@ color:rgb(255,140,0);
 margin:-0.5rem 0 0 2rem;
 position:absolute;
 }
-.cart{
+.buy{
 font-size:1.7rem;
+padding:0.5rem;
+text-decoration:none;
 background-color:rgb(0,0,0);
 font-weight:700;
 color:rgb(255,130,0);
+}
+.buy:hover{
+color:rgb(0,0,0);
+background-color:rgb(255,130,0);
 }
 .filter{
 float:right;
@@ -171,8 +177,10 @@ input[type=submit]{
                         <h5 style="display: inline-block;">Price:&nbsp;</h5>{{pro.product_price}}
                     </li>
                 </ul>
-                <div class="card-body">
-                    <button href="#" class="cart w-100 text-center">Add To Cart</button>
+                <div class="card-body text-center">
+                    <div class="w-100 buy text-center">
+                        <a href="{{pro.link}}" target="_blank" class="buy">Buy Now</a>
+                    </div>
                 </div>
             </div>
         </div>

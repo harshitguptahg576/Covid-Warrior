@@ -29,7 +29,8 @@ def tracker(request):
         summary=result.json()["statewise"][0]
         states=result.json()["statewise"]
         tested=result.json()["tested"][-1]
-        param={"summary":summary, "tested":tested, "states":states}
+        timeseries= result.json()["cases_time_series"]
+        param={"summary":summary, "tested":tested, "states":states, "timeseries":timeseries}
     except:
         summary={"total":0,"active":0,"recovered":0,"death":0}
         param={"summary":summary}
@@ -63,12 +64,17 @@ def login(request):
  return render(request, 'covid/login.htm')
 
 def hathras(request):
- return render(request, 'covid/hathras.htm')
+    centers= Center.objects.filter(city="Hathras")
+    param={"centers":centers, "title":"Hathras"}
+    return render(request, 'covid/mathura.htm',param)
 
 def mathura(request):
     centers= Center.objects.filter(city="Mathura")
-    param={"centers":centers}
+    param={"centers":centers, "title":"Mathura"}
     return render(request, 'covid/mathura.htm',param)
 
 def aligarh(request):
- return render(request, 'covid/aligarh.htm')
+    centers= Center.objects.filter(city="Aligarh")
+    param={"centers":centers, "title":"Aligarh"}
+    return render(request, 'covid/mathura.htm',param)
+ 

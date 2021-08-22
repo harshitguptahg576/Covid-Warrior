@@ -21,9 +21,10 @@ width:90%;
 font-family: "Georgia", serif;
 }
 .rep{
-width:95%;
+width:95vw;
 font-size:1.37rem;
 font-family: "Georgia", serif;
+overflow:auto;
 }
 th{
   font-size:1.085em;
@@ -62,6 +63,7 @@ color:rgb(0,0,0);
 }
 .state{
 width:24vw;
+min-width: 150px;
 overflow:hidden;
 height:3.65rem;
 font-size:1.02em;
@@ -88,35 +90,47 @@ color: gray;
 .upd{
 color: orange;
 }
-
+.modal-content{
+  margin-left:-10rem;
+}
 
 @media(max-width:770px){
   .carousel-item img{
     height:55vh;
+  }
+  .modal-content{
+    margin-left:0rem;
   }
 }
 
 
 @media(max-width:450px){
   .carousel-item img{
-    height:35vh;
+  height:35vh;
   }
   .contain{
-    height:37vh;
-    }
+  height:37vh;
+  }
   .tit{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight: 400;
-      height: 7.5vh;
-      }
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 400;
+  height: 7.5vh;
+  }
   .tit::before{
-      display:none;
-      }
-      .m{
-        display:none;
-      }
+  display:none;
+  }
+  h5{
+  font-size:1.5rem;
+  }
+  .modal-content{
+    margin-left:0rem;
+    overflow:auto;
+}
+  h3{
+  font-size:2.0rem;
+  }
 }
 
 {% endblock %}
@@ -177,7 +191,7 @@ color: orange;
   <div class="contain">
     <div class="row report mx-auto">
       <div class="col-3 text-center" style="color: red;">
-        <h5>Total Cases</h5>
+        <h5>Confirmed</h5>
         <h3 class="count">{{summary.confirmed}}</h3>
       </div>
       <div class="col-3 text-center" style="color: rgb(0, 112, 216);">
@@ -205,7 +219,7 @@ color: orange;
   <div class="modal fade" id="{{st.statecode}}" style="width:100vw;" data-bs-backdrop="static" data-bs-keyboard="false"
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content" style="width:100vw; margin-left:-7rem; padding:0.5rem 2rem;">
+      <div class="modal-content" style="width:100vw; margin: 2rem; padding:0.5rem 2rem;">
         <div class="modal-header" style="height:8vh;">
           <h5 class="modal-title" style="margin-left: 7rem; font-weight: 800;" id="staticBackdropLabel">&#128312;{{st.state}}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -254,7 +268,7 @@ color: orange;
   </div>
   {% endfor %}
 
-  <div class="row rep mx-auto">
+  <div class="row rep mx-auto overflow">
     <table class="table mt-5 text-center">
       <thead>
         <tr class="tr">
